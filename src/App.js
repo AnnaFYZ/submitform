@@ -4,7 +4,28 @@ import './App.css';
 function Form (){
   let [nameValue, setNameValue] = useState("");
   let [textValue, setTextValue] = useState("");
-  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const response = await fetch(
+      "https://chat-server-f7qp.onrender.com/messages",
+      {
+        method: "post",
+        body: JSON.stringify({
+          id: 15,
+          from: nameValue,
+          text: textValue,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const result = await response.json();
+    console.log(result);
+  };
+
   return (
     <div>
       <head>
@@ -13,7 +34,7 @@ function Form (){
       <body>
         <h1>CYF Chat</h1>
         <h2>Send a message</h2>
-        <form action="/messages" method="post">
+        <form method="post" onSubmit={handleSubmit}>
           <p>
             Name:{" "}
             <input
@@ -29,14 +50,17 @@ function Form (){
               type="text"
               name="text"
               placeholder="The message..."
-              value={textValue} onChange={(e) => setTextValue(e.target.value)}
+              value={textValue}
+              onChange={(e) => setTextValue(e.target.value)}
             />
             <br />
           </p>
           <button type="submit">Send</button>
         </form>
 
-        <a href="/messages">See all messages</a>
+        <a href="https://chat-server-f7qp.onrender.com/messages">
+          See all messages
+        </a>
       </body>
     </div>
   );
